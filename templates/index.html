@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Resume Screening & Job-Matching System</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <script src="{{ url_for('static', filename='app.js') }}" defer></script>
+</head>
+<body>
+  <nav class="navbar navbar-dark bg-dark mb-4">
+    <div class="container nav-shell">
+      <span class="navbar-brand mb-0 h1">🎯 AI Resume Screening & Job-Matching System</span>
+      <span class="nav-badge">ATS Demo</span>
+    </div>
+  </nav>
+
+  <main class="container page-shell">
+    <section class="intro-hero mb-4">
+      <div class="hero-copy">
+        <span class="eyebrow">SMART HIRING WORKSPACE</span>
+        <h1>Find the strongest match faster.</h1>
+        <p>Turn a job description and a stack of resumes into a clear, ranked shortlist with a recruiter-friendly workflow.</p>
+
+        <div class="template-row" aria-label="Job description templates">
+          <button type="button" class="template-pill active" data-template="We are looking for a candidate with strong experience in Python, SQL, JavaScript, cloud platforms, problem solving, communication, and teamwork. The ideal person should be able to build scalable applications and work closely with cross-functional teams.">Try your resume</button>
+        </div>
+      </div>
+
+      <div class="hero-panel" aria-label="System overview">
+        <div class="panel-header">ATS Resume Overview</div>
+        <div class="metric-row">
+          <span>Candidate matching</span>
+          <strong>AI Insights</strong>
+        </div>
+        <div class="metric-row">
+          <span>Resume formats</span>
+          <strong>PDF / DOCX / TXT</strong>
+        </div>
+        <div class="metric-row">
+          <span>Fit quality</span>
+          <strong>High confidence</strong>
+        </div>
+      </div>
+    </section>
+
+    <div class="feature-strip mb-4" aria-label="Application features">
+      <div><span class="feature-icon icon-teal">⌁</span><strong>Skill-aware</strong><small>Matches real capabilities</small></div>
+      <div><span class="feature-icon icon-coral">↗</span><strong>Ranked results</strong><small>See your best candidates first</small></div>
+      <div><span class="feature-icon icon-gold">◉</span><strong>Quick review</strong><small>Compare scores at a glance</small></div>
+    </div>
+
+    <div class="row justify-content-center">
+      <div class="col-lg-8">
+
+        {% with messages = get_flashed_messages() %}
+          {% if messages %}
+            <div class="alert alert-warning">
+              {% for msg in messages %}
+                <div>{{ msg }}</div>
+              {% endfor %}
+            </div>
+          {% endif %}
+        {% endwith %}
+
+        <form action="{{ url_for('match') }}" method="post" enctype="multipart/form-data" class="card shadow-sm match-form" data-match-form>
+          <div class="card-body compact-form">
+
+            <div class="form-row">
+              <div class="d-flex justify-content-between align-items-center gap-2 mb-2">
+                <label for="job_description" class="form-label fw-bold mb-0">Job Description</label>
+                <span class="field-counter" data-character-count>0 characters</span>
+              </div>
+              <textarea class="form-control" id="job_description" name="job_description" rows="7" placeholder="Paste the full job description here...">{{ request.form.get('job_description', '') }}</textarea>
+            </div>
+
+            <div class="form-row">
+              <label for="resumes" class="form-label fw-bold mb-2">Upload Resume(s)</label>
+              <div class="upload-box" data-upload-dropzone>
+                <div class="upload-icon">⇪</div>
+                <div class="upload-copy">
+                  <strong>Drop resumes here</strong>
+                  <span>or click to browse</span>
+                </div>
+                <label for="resumes" class="upload-trigger">Browse files</label>
+                <input class="form-control" type="file" id="resumes" name="resumes" accept=".pdf,.docx,.txt" multiple required>
+                <div class="file-preview" data-file-preview>PDF, DOCX, or TXT accepted</div>
+              </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100" data-submit-button>
+              <span data-submit-label>Run Matching</span>
+              <span class="spinner-border spinner-border-sm d-none" data-submit-spinner aria-hidden="true"></span>
+            </button>
+          </div>
+        </form>
+
+      </div>
+    </div>
+  </main>
+</body>
+</html>
